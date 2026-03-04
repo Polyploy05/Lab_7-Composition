@@ -1,47 +1,46 @@
 
 
 
-from die import Die
+import Die
+import math
+
 class Player:
     def __init__(self):
-        d1 = Die(6)
-        d2 = Die(6)
-        d3 = Die(6)
-        self._dice = [d1, d2, d3]
-        self._dice.sort()
-        self._points = 0
+        d1 = Die.Die(6)
+        d2 = Die.Die(6)
+        d3 = Die.Die(6)
+        self.dice = [d1, d2, d3]
+        self.score = 0
 
-    @property
     def points(self):
-        return self._points
+        return self.score
     
     def roll_dice(self):
-        for die in self._dice:
+        for die in self.dice:
             die.roll()
-        self._dice.sort()
     
     def has_pair(self):
-        if self._dice[0] == self._dice[1] or self._dice[1] == self._dice[2]:
-            self._points += 1
-            return True
+        for i in range(len(self.dice)):
+            for j in range(i+1, len(self.dice)):
+                if self.dice[i] == self.dice[j]:
+                    self.score += 1
+                    return True
         return False
                 
     def has_three_of_a_kind(self):
-        if self._dice[0] == self._dice[1] and self._dice[1] == self._dice[2]:
-            self._points += 3
+        if self.dice[0] == self.dice[1] and self.dice[1] == self.dice[2]:
+            self.score += 3
             return True
         return False
-
+    
     def has_series(self):
-        v1 = self._dice[0].value
-        v2 = self._dice[1].value
-        v3 = self._dice[2].value
-
-        if v2 - v1 == 1 and v3 - v2 == 1:
-            self._points += 2
-            return True
-        return False
-
+        values = sorted([die.value for die in self.dice])
+        for i in range(1, len(values)):
+            if values[i] != values[i-1] + 1:
+                return False
+        self.score += 2
+        return True
+    
     def __str__(self):
-        return f"D1 = {self._dice[0].value}, D2 = {self._dice[1].value}, D3 = {self._dice[2].value}"
+        return f"D1: {self.dice[0]}, D2: {self.dice[1]}, D3: {self.dice[2]}"
 
