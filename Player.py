@@ -16,7 +16,7 @@ class Player:
         return self._points
     
     def roll_dice(self):
-        for die in self.dice:
+        for die in self._dice:
             die.roll()
         self._dice.sort()
     
@@ -28,7 +28,7 @@ class Player:
                 
     def has_three_of_a_kind(self):
         if self._dice[0] == self._dice[1] and self._dice[1] == self._dice[2]:
-            self.points += 3
+            self._points += 3
             return True
         return False
 
@@ -44,3 +44,4 @@ class Player:
 
     def __str__(self):
         return f"D1 = {self._dice[0].value}, D2 = {self._dice[1].value}, D3 = {self._dice[2].value}"
+
