@@ -1,69 +1,119 @@
-import check_input
-import random
+""" Set of functions to validate user input.
 
-'''Authors: Jacob Miranda, Justin Hahn, Daniel Puerto
-Date: 1/21/2026
-Function: Plays a shell game with the user where they can bet money on guessing
-the position of a ball under one of three shells. Runs until the user runs out of money
-or chooses to stop playing.'''
+Written by: Shannon Cleary
+Date: 2026
 
-def main():
+Functions:
+	get_int(prompt) - returns a valid integer (positive or negative).
+	get_positive_int(prompt) - returns a valid positive (>=0) integer.
+	get_int_range(prompt, low, high) - returns a valid integer within the inclusive range.
+	get_float(prompt) - returns a valid decimal value.
+	get_yes_no(prompt) - returns a valid yes/no input.
 
-    """Sets up the initial variables for amount of money to spend, as well as a
-    placeholder variable for the bet amount and the continuation criteria"""
-    wallet = 100
-    bet = int(-1)
-    play = True
-    print("-Shell Game-")
-    print("Find the ball to double your bet!")
-    print("")
+Usage: in your program, import the check_input module.  Then call one of the methods using check_input.
 
-    """Main loop sequence. Obtains a bet amount, randomizes the ball position,
-    shows the cups, and obtains the user's guess."""
-    while play:
-        print(f"You have $" + str(wallet) + " to play with.")
-        bet = check_input.get_int_range("Please Enter your bet: ", 1, int(wallet))
-        ball_position = random.randint(1, 3)
-        print("  _____       _____       _____ ")
-        print(" /     \\     /     \\     /     \\")
-        print("/   1   \\   /   2   \\   /   3   \\")
-        print("---------   ---------   ---------")
+Example Usage:
 
-        guess = check_input.get_int_range("Guess the shell (1-3): ", 1, 3)
+	import check_input
+
+	val = check_input.get_int("Enter #:")
+	print(val)
+
+"""
+
+def get_int(prompt):
+  """Repeatedly takes in and validates user's input to ensure that it is an integer.
+  Args:
+    prompt: string to display to the user to prompt them to enter an input.
+  Returns:
+    The valid positive integer input.
+  """
+  val = 0
+  valid = False
+  while not valid:
+    try:
+      val = int(input(prompt))
+      valid = True
+    except ValueError:
+      print("Invalid input - should be an integer.")
+  return val
 
 
-        """Shows the position of the ball after the user's guess."""
-        if ball_position == 1:
-            print("  _____       _____       _____ ")
-            print(" /     \\     /     \\     /     \\")
-            print("/   o   \\   /      \\   /      \\")
-            print("---------   ---------   ---------")
-        elif ball_position == 2:
-            print("  _____       _____       _____ ")
-            print(" /     \\     /     \\     /     \\")
-            print("/       \\   /   o   \\   /       \\")
-            print("---------   ---------   ---------")
-        else:
-            print("  _____       _____       _____ ")
-            print(" /     \\     /     \\     /     \\")
-            print("/       \\   /       \\   /   o   \\")
-            print("---------   ---------   ---------")
+def get_positive_int(prompt):
+  """Repeatedly takes in and validates user's input to ensure that it is a positive (>= 0) integer.
+  Args:
+    prompt: string to display to the user to prompt them to enter an input.
+  Returns:
+    The valid integer input.
+  """
+  val = 0
+  valid = False
+  while not valid:
+    try:
+      val = int(input(prompt))
+      if val >= 0:
+        valid = True
+      else:
+        print("Invalid input - should not be negative.")
+    except ValueError:
+      print("Invalid input - should be an integer.")
+  return val  
 
-        """Adds money to the wallet if the user guesses correctly, subtracts otherwise.
-        Tells the user of the outcome then asks if they want to play again."""
-        if guess == ball_position:
-            wallet += bet
-            print(f"Congragulations!")
-        else:
-            wallet -= bet
-            print(f"Sorry, you lost.")
 
-        """Two checks for continuation: if the user is out of money, or if they choose not to continue."""
-        if wallet<= 0:
-            print("You have run out of money to play.")
-            break
-        play = check_input.get_yes_no("Do you want to play again? (y/n): ")
-        
-    print("Thanks for playing!")
-    
-main()
+def get_int_range(prompt, low, high):
+  """Repeatedly takes in and validates user's input to ensure that it is an integer within the specified range.
+  Args:
+    prompt: string to display to the user to prompt them to enter an input.
+    low: lower bound of range (inclusive)
+    high: upper bound of range (inclusive)
+  Returns:
+    The valid integer input within the specified range.
+  """
+  val = 0
+  valid = False
+  while not valid:
+    try:
+      val = int(input(prompt))
+      if val >= low and val <= high:
+        valid = True
+      else:
+        print("Invalid input - should be within range " + str(low) + "-" + str(high) + ".")
+    except ValueError:
+      print("Invalid input - should be an integer.")
+  return val
+
+
+def get_float(prompt):
+  """Repeatedly takes in and validates user's input to ensure that it is a float.
+  Args:
+    prompt: string to display to the user to prompt them to enter an input.
+  Returns:
+    The valid floating point input.
+  """
+  val = 0
+  valid = False
+  while not valid:
+    try:
+      val = float(input(prompt))
+      valid = True
+    except ValueError:
+      print("Invalid input - should be a decimal value.")
+  return val
+
+
+def get_yes_no(prompt):
+  """Repeatedly takes in and validates user's input to ensure that it is a yes or a no answer.
+  Args:
+    prompt: string to display to the user to prompt them to enter an input.
+  Returns:
+    True if yes, False if no.
+  """
+  valid = False
+  while not valid:
+    val = input(prompt).upper()
+    if val == "YES" or val == "Y":
+      return True
+    elif val == "NO" or val == "N":
+      return False
+    else:
+      print("Invalid input - should be a 'Yes' or 'No'.")
